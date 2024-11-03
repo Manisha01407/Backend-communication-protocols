@@ -87,3 +87,45 @@ npm run dev
 WebSocket provides full-duplex communication channels over a single TCP connection.
 It enables real-time messaging between clients and servers without the need for repeated HTTP requests.
 With this setup, you can achieve real-time communication between the Node.js server and the React client using WebSocket.
+
+## 3.Kafka with Node.js: Producer, Consumer, Consumer Groups, and Partitions
+This guide provides a step-by-step approach to setting up Apache Kafka using Docker, creating topics, and working with Kafka concepts like producer, consumer, consumer groups, and partitions.
+
+## Prerequisites
+Docker: Ensure Docker is installed and running on your system.
+Node.js: Install Node.js if you plan to use Kafka clients in Node.js for producing or consuming messages.
+
+### Step 1: Set Up Kafka Using Docker
+Run a Kafka Container: Start an Apache Kafka container using Docker:
+docker run -p 9092:9092 apache/kafka:3.7.1
+
+### Access the Kafka Container: To access the Kafka container’s shell, list the running containers and then use docker exec:
+docker ps  # Find your Kafka container ID
+docker exec -it <container_id> /bin/bash
+cd /opt/kafka/bin
+
+## Step 2: Kafka Basics
+Concepts Overview
+Producer: A client that publishes messages to Kafka topics.
+Consumer: A client that reads messages from Kafka topics.
+Consumer Group: A group of consumers that work together to read from a set of topic partitions. Kafka distributes messages across the consumers in a group.
+Partition: Topics are divided into partitions to allow parallel processing and scalability.
+
+### Step 3: Working with Kafka Topics
+Create a Topic: Create a Kafka topic named quickstart-events:
+./kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092
+
+### Produce Messages to the Topic: Open a producer to send messages to the quickstart-events topic:
+./kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
+
+### Type messages into the terminal. Each line is a new message sent to the topic.
+Consume Messages from the Topic: Open a consumer to read messages from the quickstart-events topic:
+./kafka-console-consumer.sh --topic quickstart-events --from-beginning --bootstrap-server localhost:9092
+
+### Step 4: Using Partitions in Kafka
+Partitions allow you to split data across multiple nodes for parallel processing.
+Create a New Topic with Multiple Partitions: Create a topic named payment-done with 3 partitions:
+./kafka-topics.sh --create --topic payment-done --partitions 3 --bootstrap-server localhost:9092
+
+### Verify Partitions: Check the configuration of the payment-done topic to confirm it has 3 partitions:
+./kafka-topics.sh --describe --topic payment-done --bootstrap-server localhost:9092
